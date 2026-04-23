@@ -1,0 +1,26 @@
+{
+  "overview": "Calculadora profesional de instalaciones eléctricas conforme a la Norma Boliviana NB 777 y el RTDE. Herramienta para ingenieros electricistas con fórmulas matemáticas explícitas, verificación normativa y generación de informes técnicos.",
+  "features": [
+    "Formulario de entrada completo (luminarias, tomas, motores, voltaje, conductor)",
+    "Cálculo de demanda máxima con factores de simultaneidad NB 777",
+    "Dimensionamiento de cables con verificación caída de tensión",
+    "Selección de protecciones (ITM, diferencial, relé térmico) con cálculo de Icc",
+    "Compensación de factor de potencia con banco de capacitores",
+    "Cálculo y selección de transformador con reserva 15-20%",
+    "Diagrama unifilar ASCII y lista de materiales",
+    "Informe técnico con advertencias normativas en rojo",
+    "Guardado y gestión de proyectos en backend",
+    "Fórmulas matemáticas expandibles con referencia al artículo NB 777"
+  ],
+  "category": "productivity",
+  "tags": [
+    "electrical",
+    "engineering",
+    "nb777",
+    "bolivia",
+    "calculation",
+    "professional",
+    "normativa"
+  ],
+  "last_updated": "2026-04-20T22:31:04.397Z"
+}

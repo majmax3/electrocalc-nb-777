@@ -1,0 +1,163 @@
+type VoltageSystem = 
+ variant {
+   mono220;
+   tri220;
+   tri380;
+ };
+type TransformerResult = 
+ record {
+   formulaSteps: vec FormulaStep;
+   isExistingAdequate: opt bool;
+   primaryCurrentA: float64;
+   requiredKVA: float64;
+   secondaryCurrentA: float64;
+   selectedKVA: float64;
+ };
+type TransformerMode = 
+ variant {
+   existing;
+   own;
+ };
+type Timestamp = int;
+type ProjectInput = 
+ record {
+   ambientTempC: float64;
+   commonOutlets: vec CommonOutletLoad;
+   conductorType: ConductorType;
+   distanceToTransformerM: float64;
+   existingTransformerKVA: opt float64;
+   floors: nat;
+   initialPowerFactor: float64;
+   installationType: InstallationType;
+   luminaires: vec LuminaireLoad;
+   name: text;
+   powerOutlets: vec PowerOutletLoad;
+   totalAreaM2: float64;
+   transformerMode: TransformerMode;
+   voltageSystem: VoltageSystem;
+ };
+type ProjectId = text;
+type Project = 
+ record {
+   createdAt: Timestamp;
+   id: ProjectId;
+   input: ProjectInput;
+   name: text;
+   result: opt CalculationResult;
+   updatedAt: Timestamp;
+ };
+type PowerOutletLoad = 
+ record {
+   cosPhi: float64;
+   efficiency: float64;
+   isWetArea: bool;
+   name: text;
+   powerKW: float64;
+   voltage: float64;
+ };
+type PowerFactorCompensation = 
+ record {
+   capacitorMicroFarads: float64;
+   formulaSteps: vec FormulaStep;
+   needed: bool;
+   reactiveKVAR: float64;
+   suggestedBankKVAR: float64;
+ };
+type LuminaireLoad = 
+ record {
+   quantity: nat;
+   typ: text;
+   unitPowerW: float64;
+ };
+type InstallationType = 
+ variant {
+   industrial;
+   residential;
+ };
+type FormulaStep = 
+ record {
+   expression: text;
+   name: text;
+   nb777Ref: text;
+   result: float64;
+   substitution: text;
+   unit: text;
+ };
+type EnergyEstimate = 
+ record {
+   dailyKWh: float64;
+   dailyUsageHours: float64;
+   estimatedMonthlyCostBs: float64;
+   monthlyKWh: float64;
+ };
+type ConductorType = 
+ record {
+   insulation: ConductorInsulation;
+   material: ConductorMaterial;
+ };
+type ConductorMaterial = 
+ variant {
+   aluminum;
+   copper;
+ };
+type ConductorInsulation = 
+ variant {
+   pvc;
+   xlpe;
+ };
+type CommonOutletLoad = record {quantity: nat;};
+type CircuitType = 
+ variant {
+   common;
+   lighting;
+   power;
+ };
+type CircuitDesign = 
+ record {
+   cableSectionMm2: float64;
+   circuitType: CircuitType;
+   compliesNB777: bool;
+   correctedCurrentA: float64;
+   description: text;
+   formulaSteps: vec FormulaStep;
+   id: text;
+   itmAmperes: nat;
+   nominalCurrentA: float64;
+   points: nat;
+   totalPowerVA: float64;
+   voltageDropPct: float64;
+   warnings: vec text;
+ };
+type CalculationResult = 
+ record {
+   asciiFloorPlan: text;
+   asciiSingleLineDiagram: text;
+   circuits: vec CircuitDesign;
+   demandFormulaSteps: vec FormulaStep;
+   energyEstimate: EnergyEstimate;
+   globalWarnings: vec text;
+   groupingFactor: float64;
+   input: ProjectInput;
+   lineCurrentA: float64;
+   materialsList: vec record {
+                        text;
+                        nat;
+                        text;
+                      };
+   maxDemandVA: float64;
+   powerFactorCompensation: PowerFactorCompensation;
+   projectId: ProjectId;
+   shortCircuitCurrentA: float64;
+   shortCircuitFormulaSteps: vec FormulaStep;
+   temperatureFactor: float64;
+   totalInstalledPowerVA: float64;
+   transformer: opt TransformerResult;
+ };
+service : {
+  calculateProject: (projectId: text) -> (opt CalculationResult);
+  createProject: (input: ProjectInput) -> (text);
+  deleteProject: (id: text) -> (bool);
+  getProject: (id: text) -> (opt Project) query;
+  listProjects: () -> (vec Project) query;
+  updateProjectInput: (id: text, input: ProjectInput) -> (bool);
+}

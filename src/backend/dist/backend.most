@@ -1,0 +1,141 @@
+// Version: 1.0.0
+type CalculationResult__658974138 =
+  {
+    asciiFloorPlan : Text;
+    asciiSingleLineDiagram : Text;
+    circuits : [CircuitDesign__19365419];
+    demandFormulaSteps : [FormulaStep__688679222];
+    energyEstimate : EnergyEstimate__1054891335;
+    globalWarnings : [Text];
+    groupingFactor : Float;
+    input : ProjectInput__866401492;
+    lineCurrentA : Float;
+    materialsList : [(Text, Nat, Text)];
+    maxDemandVA : Float;
+    powerFactorCompensation : PowerFactorCompensation__38175415;
+    projectId : ProjectId__112388629;
+    shortCircuitCurrentA : Float;
+    shortCircuitFormulaSteps : [FormulaStep__688679222];
+    temperatureFactor : Float;
+    totalInstalledPowerVA : Float;
+    transformer : ?TransformerResult__786876315
+  };
+type CircuitDesign__19365419 =
+  {
+    cableSectionMm2 : Float;
+    circuitType : CircuitType__574032937;
+    compliesNB777 : Bool;
+    correctedCurrentA : Float;
+    description : Text;
+    formulaSteps : [FormulaStep__688679222];
+    id : Text;
+    itmAmperes : Nat;
+    nominalCurrentA : Float;
+    points : Nat;
+    totalPowerVA : Float;
+    voltageDropPct : Float;
+    warnings : [Text]
+  };
+type CircuitType__574032937 = {#common; #lighting; #power};
+type CommonOutletLoad__876654105 = {quantity : Nat};
+type ConductorInsulation__840070254 = {#pvc; #xlpe};
+type ConductorMaterial__547041174 = {#aluminum; #copper};
+type ConductorType__947606177 =
+  {
+    insulation : ConductorInsulation__840070254;
+    material : ConductorMaterial__547041174
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type EnergyEstimate__1054891335 =
+  {
+    dailyKWh : Float;
+    dailyUsageHours : Float;
+    estimatedMonthlyCostBs : Float;
+    monthlyKWh : Float
+  };
+type FormulaStep__688679222 =
+  {
+    expression : Text;
+    name : Text;
+    nb777Ref : Text;
+    result : Float;
+    substitution : Text;
+    unit : Text
+  };
+type InstallationType__263704464 = {#industrial; #residential};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type LuminaireLoad__42020539 =
+  {quantity : Nat; typ : Text; unitPowerW : Float};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PowerFactorCompensation__38175415 =
+  {
+    capacitorMicroFarads : Float;
+    formulaSteps : [FormulaStep__688679222];
+    needed : Bool;
+    reactiveKVAR : Float;
+    suggestedBankKVAR : Float
+  };
+type PowerOutletLoad__398593436 =
+  {
+    cosPhi : Float;
+    efficiency : Float;
+    isWetArea : Bool;
+    name : Text;
+    powerKW : Float;
+    voltage : Float
+  };
+type ProjectId__112388629 = ProjectId__478417951;
+type ProjectId__478417951 = Text;
+type ProjectInput__866401492 =
+  {
+    ambientTempC : Float;
+    commonOutlets : [CommonOutletLoad__876654105];
+    conductorType : ConductorType__947606177;
+    distanceToTransformerM : Float;
+    existingTransformerKVA : ?Float;
+    floors : Nat;
+    initialPowerFactor : Float;
+    installationType : InstallationType__263704464;
+    luminaires : [LuminaireLoad__42020539];
+    name : Text;
+    powerOutlets : [PowerOutletLoad__398593436];
+    totalAreaM2 : Float;
+    transformerMode : TransformerMode__538519376;
+    voltageSystem : VoltageSystem__109504453
+  };
+type Project__199357381 =
+  {
+    createdAt : Timestamp__974600429;
+    id : ProjectId__112388629;
+    input : ProjectInput__866401492;
+    name : Text;
+    result : ?CalculationResult__658974138;
+    updatedAt : Timestamp__974600429
+  };
+type Timestamp__301639476 = Int;
+type Timestamp__974600429 = Timestamp__301639476;
+type TransformerMode__538519376 = {#existing; #own};
+type TransformerResult__786876315 =
+  {
+    formulaSteps : [FormulaStep__688679222];
+    isExistingAdequate : ?Bool;
+    primaryCurrentA : Float;
+    requiredKVA : Float;
+    secondaryCurrentA : Float;
+    selectedKVA : Float
+  };
+type VoltageSystem__109504453 = {#mono220; #tri220; #tri380};
+actor {
+  stable nextId : {var value : Nat};
+  stable projects :
+    {
+      var root : Node__46230540<Text, Project__199357381>;
+      var size : Nat__490723111
+    }
+};
